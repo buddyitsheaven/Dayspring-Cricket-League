@@ -1,0 +1,24 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  host: <%= ENV["DB_HOST"] %>
+  port: <%= ENV.fetch("DB_PORT", 5432) %>
+  username: <%= ENV.fetch("DB_USERNAME", ENV.fetch("USER", "postgres")) %>
+  password: <%= ENV["DB_PASSWORD"] %>
+
+development:
+  <<: *default
+  host: <%= ENV.fetch("DB_HOST", "report-pundit-staging.cuhlgog5njf5.us-west-2.rds.amazonaws.com") %>
+  username: <%= ENV.fetch("DB_USERNAME", "dayspring") %>
+  database: <%= ENV.fetch("DB_NAME", "dayspring_fantasy") %>
+
+test:
+  <<: *default
+  database: <%= ENV.fetch("DB_TEST_NAME", "dayspring_ipl_prediction_test") %>
+
+production:
+  <<: *default
+  host: <%= ENV.fetch("DB_HOST", "report-pundit-staging.cuhlgog5njf5.us-west-2.rds.amazonaws.com") %>
+  username: <%= ENV.fetch("DB_USERNAME", "dayspring") %>
+  database: <%= ENV.fetch("DB_NAME", "dayspring_fantasy") %>

@@ -1,0 +1,13 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  team_one: MyString
+  team_two: MyString
+  venue: MyString
+  starts_at: 2026-03-27 12:31:33
+
+two:
+  team_one: MyString
+  team_two: MyString
+  venue: MyString
+  starts_at: 2026-03-27 12:31:33

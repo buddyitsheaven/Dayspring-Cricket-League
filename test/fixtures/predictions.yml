@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  prediction_question: one
+  prediction_option: one
+
+two:
+  user: two
+  prediction_question: two
+  prediction_option: two

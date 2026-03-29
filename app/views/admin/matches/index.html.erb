@@ -1,0 +1,22 @@
+<section class="panel">
+  <div class="panel-header">
+    <div>
+      <p class="eyebrow">Admin</p>
+      <h1>Matches</h1>
+    </div>
+    <div class="panel-actions">
+      <%= link_to "View logs", admin_prediction_submissions_path, class: "button button-secondary" %>
+      <%= link_to "Add match", new_admin_match_path, class: "button button-primary" %>
+    </div>
+  </div>
+
+  <div class="leaderboard-table">
+    <% @matches.each do |match| %>
+      <div class="leaderboard-row">
+        <span><%= format_india_time(match.starts_at, "%d %b, %I:%M %p") %></span>
+        <span><%= match.name %></span>
+        <span><%= link_to "Edit", edit_admin_match_path(match) %></span>
+      </div>
+    <% end %>
+  </div>
+</section>

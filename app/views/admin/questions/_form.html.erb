@@ -1,0 +1,43 @@
+<% if @question.errors.any? %>
+  <div class="error-box"><%= @question.errors.full_messages.to_sentence %></div>
+<% end %>
+
+<%= form_with model: @question, url: (@question.persisted? ? admin_match_question_path(@match, @question) : admin_match_questions_path(@match)), class: "stack-form" do |form| %>
+  <div>
+    <%= form.label :prompt %>
+    <%= form.text_field :prompt, class: "text-input", required: true %>
+  </div>
+
+  <div>
+    <%= form.label :point_value %>
+    <%= form.number_field :point_value, class: "text-input", min: 1, required: true %>
+  </div>
+
+  <% if @question.new_record? %>
+    <div>
+      <%= label_tag :option_labels, "Options (one per line)" %>
+      <%= text_area_tag "prediction_question[option_labels]", nil, class: "text-input textarea-input", required: true %>
+    </div>
+  <% else %>
+    <div class="panel">
+      <p class="eyebrow">Result</p>
+      <p class="muted">After the match is finished, select the actual answer here.</p>
+
+      <div>
+        <%= form.label :correct_option_id, "Correct option" %>
+        <%= form.collection_select :correct_option_id, @question.options, :id, :label, { include_blank: "Not decided yet" }, class: "text-input" %>
+      </div>
+    </div>
+
+    <div>
+      <p class="eyebrow">Options</p>
+    </div>
+    <div class="options-grid">
+      <% @question.options.each do |option| %>
+        <span class="pill"><%= option.label %></span>
+      <% end %>
+    </div>
+  <% end %>
+
+  <%= form.submit(@question.persisted? ? "Save result" : "Create question", class: "button button-primary") %>
+<% end %>

@@ -1,0 +1,31 @@
+<section class="panel">
+  <div class="panel-header">
+    <div>
+      <p class="eyebrow">Admin</p>
+      <h1>Prediction logs</h1>
+    </div>
+    <%= link_to "Matches", admin_root_path, class: "button button-secondary" %>
+  </div>
+
+  <div class="leaderboard-table">
+    <div class="leaderboard-row leaderboard-head">
+      <span>Time</span>
+      <span>User</span>
+      <span>Match</span>
+      <span>Question</span>
+      <span>Pick</span>
+      <span>Action</span>
+    </div>
+
+    <% @prediction_submissions.each do |submission| %>
+      <div class="leaderboard-row admin-log-row">
+        <span><%= format_india_time(submission.submitted_at, "%d %b %Y, %I:%M %p") %></span>
+        <span><%= submission.user.email %></span>
+        <span><%= submission.match.name %></span>
+        <span><%= submission.prediction_question.prompt %></span>
+        <span><%= submission.prediction_option.label %></span>
+        <span><%= submission.action_type %></span>
+      </div>
+    <% end %>
+  </div>
+</section>

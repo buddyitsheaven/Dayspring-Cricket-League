@@ -1,0 +1,24 @@
+<section class="panel">
+  <div class="panel-header">
+    <div>
+      <p class="eyebrow">Points Table</p>
+      <h1>User rankings</h1>
+    </div>
+  </div>
+
+  <div class="leaderboard-table">
+    <div class="leaderboard-row leaderboard-head">
+      <span>Rank</span>
+      <span>User</span>
+      <span>Points</span>
+    </div>
+
+    <% @ranked_users.each_with_index do |user, index| %>
+      <div class="leaderboard-row">
+        <span>#<%= index + 1 %></span>
+        <span><%= user.email %></span>
+        <span><%= user.score %></span>
+      </div>
+    <% end %>
+  </div>
+</section>

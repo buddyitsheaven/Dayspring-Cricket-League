@@ -9,6 +9,8 @@ Rails.application.routes.draw do
   resources :leaderboards, only: :index
   resources :predictions, only: %i[create update]
 
+  resources :password_resets, param: :token, only: %i[new create edit update]
+
   namespace :admin do
     root "matches#index"
     resources :prediction_submissions, only: :index

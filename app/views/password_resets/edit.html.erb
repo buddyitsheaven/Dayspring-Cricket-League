@@ -1,0 +1,13 @@
+<section class="auth-card" style="text-align: center;">
+  <p class="eyebrow">Password Reset</p>
+  <h1>Generate Password</h1>
+
+  <p style="margin-bottom: 1.5rem; color: #4b5563;">
+    Click the button below to generate a new, secure password for your account.
+  </p>
+
+  <%= form_with url: password_reset_path(params[:token]), method: :patch, local: true, data: { turbo: false }, class: "stack-form" do |form| %>
+    <%= form.submit "Generate New Password", class: "button button-primary", style: "width: 100%; box-sizing: border-box;" %>
+  <% end %>
+
+</section>

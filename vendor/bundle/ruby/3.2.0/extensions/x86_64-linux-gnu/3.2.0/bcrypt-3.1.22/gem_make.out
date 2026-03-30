@@ -1,0 +1,29 @@
+current directory: /home/john/Dayspring-Cricket-League/vendor/bundle/ruby/3.2.0/gems/bcrypt-3.1.22/ext/mri
+/usr/bin/ruby3.2 -I/usr/lib/ruby/vendor_ruby extconf.rb
+creating Makefile
+
+current directory: /home/john/Dayspring-Cricket-League/vendor/bundle/ruby/3.2.0/gems/bcrypt-3.1.22/ext/mri
+make DESTDIR\= sitearchdir\=./.gem.20260330-19509-ou3mrb sitelibdir\=./.gem.20260330-19509-ou3mrb clean
+
+current directory: /home/john/Dayspring-Cricket-League/vendor/bundle/ruby/3.2.0/gems/bcrypt-3.1.22/ext/mri
+make DESTDIR\= sitearchdir\=./.gem.20260330-19509-ou3mrb sitelibdir\=./.gem.20260330-19509-ou3mrb
+make: Warning: File 'bcrypt_ext.c' has modification time 1.9 s in the future
+compiling bcrypt_ext.c
+compiling crypt_blowfish.c
+compiling crypt_gensalt.c
+compiling wrapper.c
+wrapper.c:182:60: warning: ‘struct crypt_data’ declared inside parameter list will not be visible outside of this definition or declaration
+  182 | char *crypt_r(const char *key, const char *setting, struct crypt_data *data)
+      |                                                            ^~~~~~~~~~
+x86_64-linux-gnu-gcc  -D__SKIP_GNU -Wdate-time -D_FORTIFY_SOURCE=3    -c -o x86.o x86.S
+linking shared-object bcrypt_ext.so
+make: warning:  Clock skew detected.  Your build may be incomplete.
+
+current directory: /home/john/Dayspring-Cricket-League/vendor/bundle/ruby/3.2.0/gems/bcrypt-3.1.22/ext/mri
+make DESTDIR\= sitearchdir\=./.gem.20260330-19509-ou3mrb sitelibdir\=./.gem.20260330-19509-ou3mrb install
+compiling bcrypt_ext.c
+linking shared-object bcrypt_ext.so
+/usr/bin/install -c -m 0755 bcrypt_ext.so ./.gem.20260330-19509-ou3mrb
+
+current directory: /home/john/Dayspring-Cricket-League/vendor/bundle/ruby/3.2.0/gems/bcrypt-3.1.22/ext/mri
+make DESTDIR\= sitearchdir\=./.gem.20260330-19509-ou3mrb sitelibdir\=./.gem.20260330-19509-ou3mrb clean

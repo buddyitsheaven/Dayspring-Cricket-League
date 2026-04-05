@@ -1,0 +1,43 @@
+<section class="panel">
+  <div class="panel-header">
+    <div>
+      <p class="eyebrow">Community Votes</p>
+      <h1><%= @match.name %></h1>
+      <p class="muted"><%= @match.venue.presence || "IPL Venue" %> · <%= format_india_time(@match.starts_at, "%d %b %Y, %I:%M %p") %></p>
+    </div>
+    <%= link_to "Back to community votes", community_votes_path(date: @selected_date), class: "button button-community" %>
+  </div>
+</section>
+
+<% @match.prediction_questions.each do |question| %>
+  <section class="panel panel-sport">
+    <div class="panel-header">
+      <div>
+        <p class="eyebrow">Question</p>
+        <h2><%= question.prompt %></h2>
+      </div>
+    </div>
+
+    <div class="vote-detail-grid">
+      <% question.options.each do |option| %>
+        <% option_predictions = question.predictions.select { |prediction| prediction.prediction_option_id == option.id } %>
+        <article class="vote-detail-card">
+          <div class="vote-detail-head">
+            <strong><%= option.label %></strong>
+            <span class="leaderboard-pill leaderboard-pill-accent"><%= option_predictions.size %> vote<%= "s" unless option_predictions.size == 1 %></span>
+          </div>
+
+          <% if option_predictions.any? %>
+            <div class="vote-user-list">
+              <% option_predictions.sort_by { |prediction| prediction.user.email }.each do |prediction| %>
+                <span class="vote-user-pill"><%= prediction.user.email %></span>
+              <% end %>
+            </div>
+          <% else %>
+            <p class="muted">No users picked this option yet.</p>
+          <% end %>
+        </article>
+      <% end %>
+    </div>
+  </section>
+<% end %>

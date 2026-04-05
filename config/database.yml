@@ -11,6 +11,7 @@ development:
   <<: *default
   host: <%= ENV.fetch("DB_HOST", "report-pundit-staging.cuhlgog5njf5.us-west-2.rds.amazonaws.com") %>
   username: <%= ENV.fetch("DB_USERNAME", "dayspring") %>
+  password: <%= ENV.fetch("DB_PASSWORD", "VEZKpVg7vnRZwiM1OhZKpVg7vnRZwiM1OhhAN") %>
   database: <%= ENV.fetch("DB_NAME", "dayspring_fantasy") %>
 
 test:
@@ -21,4 +22,5 @@ production:
   <<: *default
   host: <%= ENV.fetch("DB_HOST", "report-pundit-staging.cuhlgog5njf5.us-west-2.rds.amazonaws.com") %>
   username: <%= ENV.fetch("DB_USERNAME", "dayspring") %>
+  password: <%= ENV.fetch("DB_PASSWORD", "VEZKpVg7vnRZwiM1OhZKpVg7vnRZwiM1OhhAN") %>
   database: <%= ENV.fetch("DB_NAME", "dayspring_fantasy") %>

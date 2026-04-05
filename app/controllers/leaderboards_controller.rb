@@ -1,5 +1,5 @@
 class LeaderboardsController < ApplicationController
   def index
-    @ranked_users = User.all.sort_by { |user| [-user.score, user.email] }
+    @ranked_users = User.ranked_with_scores
   end
 end

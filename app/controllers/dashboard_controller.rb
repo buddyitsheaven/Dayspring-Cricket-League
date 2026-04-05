@@ -9,13 +9,21 @@ class DashboardController < ApplicationController
     @visible_dates = @available_dates.any? ? (@available_dates.slice((@schedule_page - 1) * DATES_PER_PAGE, DATES_PER_PAGE) || []) : []
     @matches = Match.on_date(@selected_date).includes(prediction_questions: :options)
     @predictions_by_question_id = {}
-    @ranked_users = User.all.sort_by { |user| [-user.score, user.email] }.first(3)
+    question_ids = @matches.flat_map { |match| match.prediction_questions.map(&:id) }
+    @vote_counts_by_question = Prediction
+      .where(prediction_question_id: question_ids)
+      .group(:prediction_question_id, :prediction_option_id)
+      .count
+      .each_with_object(Hash.new { |hash, key| hash[key] = {} }) do |((question_id, option_id), count), hash|
+        hash[question_id][option_id] = count
+      end
 
     return unless current_user
 
-    question_ids = @matches.flat_map { |match| match.prediction_questions.map(&:id) }
     @predictions_by_question_id = current_user.predictions.where(prediction_question_id: question_ids).index_by(&:prediction_question_id)
     @answered_questions_count = @predictions_by_question_id.size
+    @current_user_score = User.score_for(current_user.id)
+    @current_user_rank = User.rank_for(current_user.id)
     @daily_points = current_user.predictions.includes(:prediction_question).select do |prediction|
       prediction.prediction_question.match.starts_at.to_date == @selected_date && prediction.correct?
     end.sum { |prediction| prediction.prediction_question.point_value }

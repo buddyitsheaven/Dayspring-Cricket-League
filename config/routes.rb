@@ -6,6 +6,7 @@ Rails.application.routes.draw do
   resource :session, only: %i[new create destroy]
   resource :registration, only: %i[new create]
 
+  resources :community_votes, only: %i[index show]
   resources :leaderboards, only: :index
   resources :predictions, only: %i[create update]
 

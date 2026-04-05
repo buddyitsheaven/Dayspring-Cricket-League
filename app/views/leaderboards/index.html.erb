@@ -7,17 +7,19 @@
   </div>
 
   <div class="leaderboard-table">
-    <div class="leaderboard-row leaderboard-head">
+    <div class="leaderboard-row leaderboard-head leaderboard-row-table">
       <span>Rank</span>
       <span>User</span>
+      <span>Votes Till Today</span>
       <span>Points</span>
     </div>
 
     <% @ranked_users.each_with_index do |user, index| %>
-      <div class="leaderboard-row">
+      <div class="leaderboard-row leaderboard-row-table">
         <span>#<%= index + 1 %></span>
         <span><%= user.email %></span>
-        <span><%= user.score %></span>
+        <span><%= user.voted_count %></span>
+        <span><%= user.leaderboard_score %></span>
       </div>
     <% end %>
   </div>

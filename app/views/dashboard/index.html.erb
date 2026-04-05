@@ -26,8 +26,8 @@
       <section class="dashboard-panel score-card">
         <p class="muted">Your score</p>
         <div class="score-row">
-          <strong class="score-value"><%= current_user.score %></strong>
-          <span class="score-rank">#<%= (@ranked_users.map(&:id).index(current_user.id) || User.all.sort_by { |user| [-user.score, user.email] }.map(&:id).index(current_user.id) || 0) + 1 %></span>
+          <strong class="score-value"><%= @current_user_score %></strong>
+          <span class="score-rank">#<%= @current_user_rank %></span>
         </div>
       </section>
     <% end %>
@@ -143,48 +143,78 @@
             <% all_answered = match.prediction_questions.all? { |question| @predictions_by_question_id[question.id].present? } %>
 
             <div class="question-grid">
-              <% match.prediction_questions.each do |question| %>
-                <% question_locked = !question.open_for_predictions? || question.correct_option.present? %>
-                <% prediction = @predictions_by_question_id[question.id] %>
-                <section class="question-stage">
-                  <div class="question-stage-head">
-                    <div>
-                      <p class="muted"><%= question.prompt %></p>
-                      <% if prediction.present? && !question.correct_option.present? %>
-                        <span class="your-pick-chip">Saved: <%= prediction.prediction_option.label %></span>
+              <div class="question-grid-main">
+                <% match.prediction_questions.each do |question| %>
+                  <% question_locked = !question.open_for_predictions? || question.correct_option.present? %>
+                  <% prediction = @predictions_by_question_id[question.id] %>
+                  <section class="question-stage">
+                    <div class="question-stage-head">
+                      <div>
+                        <p class="question-stage-title"><%= question.prompt %></p>
+                      </div>
+                      <% if question.correct_option.present? %>
+                        <div class="question-result-stack">
+                          <span class="pill result-pill">Correct: <%= question.correct_option.label %></span>
+                          <% if prediction.present? %>
+                            <span class="pill saved-pill">Your pick: <%= prediction.prediction_option.label %></span>
+                          <% end %>
+                        </div>
+                      <% elsif prediction.present? %>
+                        <span class="saved-pick-inline">Saved: <%= prediction.prediction_option.label %></span>
                       <% end %>
                     </div>
-                    <% if question.correct_option.present? %>
-                      <div class="question-result-stack">
-                        <span class="pill result-pill">Correct: <%= question.correct_option.label %></span>
-                        <% if prediction.present? %>
-                          <span class="pill saved-pill">Your pick: <%= prediction.prediction_option.label %></span>
+
+                    <% unless question_locked %>
+                      <div class="options-grid">
+                        <% question.options.each do |option| %>
+                          <label class="option-tile option-tile-sport <%= "option-selected" if prediction&.prediction_option_id == option.id %>">
+                            <%= radio_button_tag "prediction[answers][#{question.id}]", option.id, prediction&.prediction_option_id == option.id, required: true, data: { action: "change->prediction-form#refresh" } %>
+                            <span><%= option.label %></span>
+                          </label>
                         <% end %>
                       </div>
                     <% end %>
-                  </div>
+                  </section>
+                <% end %>
+              </div>
 
-                  <% unless question_locked %>
-                    <div class="options-grid">
+              <%= link_to community_vote_path(match), class: "community-rail community-rail-shell community-rail-link" do %>
+                <p class="status-badge status-badge-success">Community Votes</p>
+                <h3 class="community-rail-title">Live pick split</h3>
+                <p class="muted community-rail-copy">See how users are leaning for each question.</p>
+                <% match.prediction_questions.each do |question| %>
+                  <% question_vote_counts = @vote_counts_by_question[question.id] || {} %>
+                  <% total_votes = question_vote_counts.values.sum %>
+                  <section class="community-rail-card">
+                    <div class="community-picks-head">
+                      <span><%= question.prompt %></span>
+                      <strong><%= total_votes %> vote<%= "s" unless total_votes == 1 %></strong>
+                    </div>
+                    <div class="community-picks-list">
                       <% question.options.each do |option| %>
-                        <label class="option-tile option-tile-sport <%= "option-selected" if prediction&.prediction_option_id == option.id %>">
-                          <%= radio_button_tag "prediction[answers][#{question.id}]", option.id, prediction&.prediction_option_id == option.id, required: true, data: { action: "change->prediction-form#refresh" } %>
-                          <span><%= option.label %></span>
-                        </label>
+                        <% option_votes = question_vote_counts[option.id].to_i %>
+                        <% option_share = total_votes.positive? ? ((option_votes * 100.0) / total_votes).round : 0 %>
+                        <div class="community-pick-row">
+                          <span class="community-pick-label"><%= option.label %></span>
+                          <div class="community-pick-bar-track">
+                            <div class="community-pick-bar-fill" style="width: <%= option_share %>%"></div>
+                          </div>
+                          <span class="community-pick-meta"><%= option_votes %></span>
+                        </div>
                       <% end %>
                     </div>
-                  <% end %>
-                </section>
+                  </section>
+                <% end %>
               <% end %>
             </div>
 
             <% unless results_announced || match.locked? %>
               <div class="submit-wrap">
                 <% if all_answered %>
-                  <p class="form-note" data-prediction-form-target="message">All questions answered. You can save or update your picks.</p>
+                  <p class="form-note form-note-inline is-hidden" data-prediction-form-target="message"></p>
                   <%= form.submit "Update picks", class: "button button-primary", data: { prediction_form_target: "submit" } %>
                 <% else %>
-                  <p class="form-alert" data-prediction-form-target="message">Select one option for every question to enable saving.</p>
+                  <p class="form-alert form-alert-inline" data-prediction-form-target="message">Select one option for every question to enable saving.</p>
                   <%= form.submit "Save all picks", class: "button button-primary", disabled: true, data: { prediction_form_target: "submit" } %>
                 <% end %>
               </div>
@@ -193,19 +223,5 @@
         <% end %>
       </article>
     <% end %>
-
-    <section class="dashboard-panel leaderboard-strip">
-      <div>
-        <h3>Leaderboard</h3>
-        <p class="muted">Updated after each match</p>
-      </div>
-
-      <div class="leaderboard-strip-items">
-        <% @ranked_users.each do |user| %>
-          <span class="leader-strip-pill"><%= user.email.split("@").first %> · <strong><%= user.score %> pts</strong></span>
-        <% end %>
-        <%= link_to "Full table", leaderboards_path, class: "button button-secondary" %>
-      </div>
-    </section>
   </section>
 </section>

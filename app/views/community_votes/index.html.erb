@@ -1,0 +1,68 @@
+<section class="panel">
+  <div class="panel-header">
+    <div>
+      <p class="eyebrow">Community Votes</p>
+      <h1>Vote trends for <%= @selected_date.strftime("%d %b %Y") %></h1>
+    </div>
+  </div>
+
+  <% if @available_dates.any? %>
+    <div class="date-strip">
+      <% @available_dates.each do |date| %>
+        <%= link_to community_votes_path(date: date), class: ["date-chip", ("date-chip-active" if date == @selected_date)] do %>
+          <%= date.strftime("%d %b") %>
+        <% end %>
+      <% end %>
+    </div>
+  <% end %>
+</section>
+
+<% if @matches.empty? %>
+  <section class="panel">
+    <p class="muted">No matches available for this date.</p>
+  </section>
+<% end %>
+
+<% @matches.each do |match| %>
+  <section class="panel panel-sport">
+    <div class="panel-header">
+      <div>
+        <p class="eyebrow"><%= match.venue.presence || "IPL Venue" %></p>
+        <h2><%= link_to match.name, community_vote_path(match), class: "community-match-link" %></h2>
+      </div>
+      <div class="community-match-meta">
+        <span class="match-time"><%= format_india_time(match.starts_at, "%d %b, %I:%M %p") %></span>
+        <%= link_to "See who voted", community_vote_path(match), class: "button button-community" %>
+      </div>
+    </div>
+
+    <% match.prediction_questions.each do |question| %>
+      <% question_vote_counts = @vote_counts_by_question[question.id] || {} %>
+      <% total_votes = question_vote_counts.values.sum %>
+      <article class="question-card question-card-sport">
+        <div class="question-head">
+          <div class="question-copy">
+            <h3><%= question.prompt %></h3>
+            <p class="muted"><%= total_votes %> vote<%= "s" unless total_votes == 1 %></p>
+          </div>
+        </div>
+
+        <div class="community-picks">
+          <div class="community-picks-list">
+            <% question.options.each do |option| %>
+              <% option_votes = question_vote_counts[option.id].to_i %>
+              <% option_share = total_votes.positive? ? ((option_votes * 100.0) / total_votes).round : 0 %>
+              <div class="community-pick-row">
+                <span class="community-pick-label"><%= option.label %></span>
+                <div class="community-pick-bar-track">
+                  <div class="community-pick-bar-fill" style="width: <%= option_share %>%"></div>
+                </div>
+                <span class="community-pick-meta"><%= option_votes %> · <%= option_share %>%</span>
+              </div>
+            <% end %>
+          </div>
+        </div>
+      </article>
+    <% end %>
+  </section>
+<% end %>

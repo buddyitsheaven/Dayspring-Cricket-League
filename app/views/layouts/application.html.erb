@@ -18,11 +18,12 @@
       </div>
       <nav class="topnav">
         <div class="nav-links">
-          <%= link_to "Home", root_path, class: "nav-link" %>
-          <%= link_to "Leaderboard", leaderboards_path, class: "nav-link" %>
+          <%= link_to "Home", root_path, class: ["nav-link", ("nav-link-active" if current_page?(root_path))] %>
+          <%= link_to "Community Votes", community_votes_path, class: ["nav-link", ("nav-link-active" if current_page?(community_votes_path))] %>
+          <%= link_to "Leaderboard", leaderboards_path, class: ["nav-link", ("nav-link-active" if current_page?(leaderboards_path))] %>
           <% if current_user&.admin? %>
-            <%= link_to "Admin", admin_root_path, class: "nav-link" %>
-            <%= link_to "Logs", admin_prediction_submissions_path, class: "nav-link" %>
+            <%= link_to "Admin", admin_root_path, class: ["nav-link", ("nav-link-active" if current_page?(admin_root_path))] %>
+            <%= link_to "Logs", admin_prediction_submissions_path, class: ["nav-link", ("nav-link-active" if current_page?(admin_prediction_submissions_path))] %>
           <% end %>
         </div>
         <div class="nav-account">

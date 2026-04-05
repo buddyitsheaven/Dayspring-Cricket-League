@@ -45,6 +45,7 @@ Thumbs.db
 /log/*
 /tmp/*
 /storage/*
+.env.render
 
 # Keep placeholder files for empty directories
 !/log/.keep

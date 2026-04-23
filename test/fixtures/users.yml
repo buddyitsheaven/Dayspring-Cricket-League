@@ -1,11 +1,4 @@
-# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
-
-one:
-  email: MyString
-  password_digest: MyString
-  admin: false
-
-two:
-  email: MyString
-  password_digest: MyString
+valid_user:
+  email: test@dayspringlabs.com
+  password_digest: <%= BCrypt::Password.create('old_password') %>
   admin: false

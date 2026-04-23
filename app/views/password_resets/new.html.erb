@@ -1,0 +1,17 @@
+<section class="auth-card">
+  <p class="eyebrow">Forgot Password</p>
+  <h1>Reset your password</h1>
+
+  <%= form_with url: password_resets_path, class: "stack-form" do |form| %>
+    <div>
+      <%= label_tag :email %>
+      <%= email_field_tag :email, params[:email], required: true, class: "text-input" %>
+    </div>
+
+    <%= form.submit "Send Reset Link", class: "button button-primary" %>
+  <% end %>
+
+  <div style="margin-top: 1rem; text-align: center;">
+    <%= link_to "Back to Login", new_session_path %>
+  </div>
+</section>

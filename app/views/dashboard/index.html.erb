@@ -170,6 +170,7 @@
                           <label class="option-tile option-tile-sport <%= "option-selected" if prediction&.prediction_option_id == option.id %>">
                             <%= radio_button_tag "prediction[answers][#{question.id}]", option.id, prediction&.prediction_option_id == option.id, required: true, data: { action: "change->prediction-form#refresh" } %>
                             <span><%= option.label %></span>
+                            <small><%= "+#{option.point_value}" + (option.penalty_value.positive? ? " / -#{option.penalty_value}" : "") %></small>
                           </label>
                         <% end %>
                       </div>
@@ -195,7 +196,7 @@
                         <% option_votes = question_vote_counts[option.id].to_i %>
                         <% option_share = total_votes.positive? ? ((option_votes * 100.0) / total_votes).round : 0 %>
                         <div class="community-pick-row">
-                          <span class="community-pick-label"><%= option.label %></span>
+                          <span class="community-pick-label"><%= option.label %> <small>(<%= "+#{option.point_value}" + (option.penalty_value.positive? ? " / -#{option.penalty_value}" : "") %>)</small></span>
                           <div class="community-pick-bar-track">
                             <div class="community-pick-bar-fill" style="width: <%= option_share %>%"></div>
                           </div>

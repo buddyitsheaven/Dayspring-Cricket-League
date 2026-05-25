@@ -12,6 +12,10 @@ class Prediction < ApplicationRecord
       prediction_question.correct_option_id == prediction_option_id
   end
 
+  def score_value
+    prediction_question.score_for(prediction_option_id)
+  end
+
   private
 
   def option_belongs_to_question

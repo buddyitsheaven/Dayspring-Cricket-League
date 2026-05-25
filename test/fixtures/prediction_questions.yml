@@ -1,0 +1,15 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  match: one
+  prompt: Match winner
+  point_value: 1
+  penalty_value: 1
+  correct_option: three
+
+two:
+  match: two
+  prompt: Toss winner
+  point_value: 1
+  penalty_value: 0
+  correct_option: two

@@ -2,8 +2,24 @@
 
 one:
   prediction_question: one
-  label: MyString
+  label: RCB
+  point_value: 1
+  penalty_value: 1
 
 two:
   prediction_question: two
-  label: MyString
+  label: GT
+  point_value: 1
+  penalty_value: 0
+
+three:
+  prediction_question: one
+  label: GT
+  point_value: 1
+  penalty_value: 1
+
+four:
+  prediction_question: two
+  label: RCB
+  point_value: 1
+  penalty_value: 0

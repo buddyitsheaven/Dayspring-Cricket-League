@@ -25,8 +25,8 @@ class DashboardController < ApplicationController
     @current_user_score = User.score_for(current_user.id)
     @current_user_rank = User.rank_for(current_user.id)
     @daily_points = current_user.predictions.includes(:prediction_question).select do |prediction|
-      prediction.prediction_question.match.starts_at.to_date == @selected_date && prediction.correct?
-    end.sum { |prediction| prediction.prediction_question.point_value }
+      prediction.prediction_question.match.starts_at.to_date == @selected_date
+    end.sum(&:score_value)
   end
 
   private

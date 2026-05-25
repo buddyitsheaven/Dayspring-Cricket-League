@@ -8,10 +8,20 @@ class PredictionQuestion < ApplicationRecord
 
   validates :prompt, presence: true
   validates :point_value, numericality: { greater_than: 0 }
+  validates :penalty_value, numericality: { greater_than_or_equal_to: 0 }
   validate :correct_option_belongs_to_question
 
   def open_for_predictions?
     !match.locked?
+  end
+
+  def score_for(option_id)
+    return 0 if correct_option_id.blank? || option_id.blank?
+
+    selected_option = options.find_by(id: option_id)
+    return 0 if selected_option.blank?
+
+    correct_option_id == option_id ? selected_option.point_value : -selected_option.penalty_value
   end
 
   private

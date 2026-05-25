@@ -6,7 +6,9 @@ class User < ApplicationRecord
         CASE
           WHEN prediction_questions.correct_option_id IS NOT NULL
            AND predictions.prediction_option_id = prediction_questions.correct_option_id
-          THEN prediction_questions.point_value
+          THEN prediction_options.point_value
+          WHEN prediction_questions.correct_option_id IS NOT NULL
+          THEN -prediction_options.penalty_value
           ELSE 0
         END
       ),
@@ -48,7 +50,7 @@ class User < ApplicationRecord
   end
 
   def self.ranked_with_scores
-    left_joins(predictions: { prediction_question: :match })
+    left_joins(predictions: [:prediction_option, { prediction_question: :match }])
       .select("users.*", "#{LEADERBOARD_SCORE_SQL} AS leaderboard_score", "#{VOTED_TILL_TODAY_SQL} AS voted_count")
       .group("users.id")
       .order(Arel.sql("leaderboard_score DESC"), :email)
@@ -63,7 +65,7 @@ class User < ApplicationRecord
   end
 
   def self.rank_for(user_id)
-    score_sql = left_joins(predictions: :prediction_question)
+    score_sql = left_joins(predictions: [:prediction_option, :prediction_question])
       .select(
         "users.id AS user_id",
         "users.email AS user_email",

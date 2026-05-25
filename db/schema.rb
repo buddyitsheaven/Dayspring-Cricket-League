@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2026_03_27_150000) do
+ActiveRecord::Schema[7.1].define(version: 2026_05_25_111000) do
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
@@ -21,6 +21,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_27_150000) do
     t.datetime "starts_at", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "poll_closed", default: false, null: false
     t.index ["starts_at"], name: "index_matches_on_starts_at"
   end
 
@@ -29,6 +30,8 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_27_150000) do
     t.string "label", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "point_value", default: 1, null: false
+    t.integer "penalty_value", default: 0, null: false
     t.index ["prediction_question_id"], name: "index_prediction_options_on_prediction_question_id"
   end
 
@@ -39,6 +42,7 @@ ActiveRecord::Schema[7.1].define(version: 2026_03_27_150000) do
     t.bigint "correct_option_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "penalty_value", default: 0, null: false
     t.index ["correct_option_id"], name: "index_prediction_questions_on_correct_option_id"
     t.index ["match_id"], name: "index_prediction_questions_on_match_id"
   end

@@ -9,13 +9,19 @@
   </div>
 
   <div>
-    <%= form.label :point_value %>
+    <%= form.label :point_value, "Points for correct answer" %>
     <%= form.number_field :point_value, class: "text-input", min: 1, required: true %>
+  </div>
+
+  <div>
+    <%= form.label :penalty_value, "Penalty for wrong answer" %>
+    <%= form.number_field :penalty_value, class: "text-input", min: 0, required: true %>
   </div>
 
   <% if @question.new_record? %>
     <div>
       <%= label_tag :option_labels, "Options (one per line)" %>
+      <p class="muted">Use `Option label` for default scoring, or `Option label | points | penalty` for custom buckets.</p>
       <%= text_area_tag "prediction_question[option_labels]", nil, class: "text-input textarea-input", required: true %>
     </div>
   <% else %>
@@ -34,7 +40,7 @@
     </div>
     <div class="options-grid">
       <% @question.options.each do |option| %>
-        <span class="pill"><%= option.label %></span>
+        <span class="pill"><%= "#{option.label} (+#{option.point_value}" + (option.penalty_value.positive? ? " / -#{option.penalty_value}" : "") + ")" %></span>
       <% end %>
     </div>
   <% end %>

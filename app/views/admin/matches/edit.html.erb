@@ -15,13 +15,18 @@
       <div class="question-head">
         <div>
           <h3><%= question.prompt %></h3>
-          <p class="muted"><%= question.point_value %> point<%= "s" unless question.point_value == 1 %></p>
+          <p class="muted">
+            +<%= question.point_value %> correct
+            <% if question.penalty_value.positive? %>
+              / -<%= question.penalty_value %> wrong
+            <% end %>
+          </p>
         </div>
         <%= link_to "Edit / Set result", edit_admin_match_question_path(@match, question), class: "button button-secondary" %>
       </div>
       <div class="options-grid">
         <% question.options.each do |option| %>
-          <span class="pill"><%= option.label %></span>
+          <span class="pill"><%= "#{option.label} (+#{option.point_value}" + (option.penalty_value.positive? ? " / -#{option.penalty_value}" : "") + ")" %></span>
         <% end %>
       </div>
       <p class="muted">

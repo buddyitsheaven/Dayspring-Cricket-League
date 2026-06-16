@@ -1,0 +1,17 @@
+<section class="auth-card" style="text-align: center;">
+  <p class="eyebrow">Password Reset</p>
+  <h1>Reset Successful</h1>
+
+  <div style="background: #eefdf4; border: 1px solid #10b981; color: #047857; padding: 1rem; border-radius: 8px; margin: 1.5rem 0;">
+    <p style="margin-bottom: 0.5rem; font-weight: 500;">Your new auto-generated password is:</p>
+    <div style="font-family: monospace; font-size: 1.5rem; background: white; padding: 0.5rem; border-radius: 4px; display: inline-block;">
+      <%= @new_password %>
+    </div>
+  </div>
+
+  <p style="margin-bottom: 1.5rem; color: #4b5563;">
+    Please log in using your new password. You can change it later in your account settings.
+  </p>
+
+  <%= link_to "Go to Login", new_session_path, class: "button button-primary", style: "display: inline-block; width: 100%; box-sizing: border-box; text-decoration: none;" %>
+</section>
